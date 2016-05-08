@@ -4,7 +4,7 @@
     import Glibc
 #endif
 
-internal protocol SQLSelectQueryBuilder : class {
+public protocol SQLSelectQueryBuilder : class {
     var _table :String { get set }
     var _columns :[String] { get set }
     var _where :[SQLQueryWhere] { get set }
@@ -16,28 +16,28 @@ internal protocol SQLSelectQueryBuilder : class {
     func escape(string :String) -> String
 }
 
-internal protocol SQLQueryWhere {}
-internal struct SQLQueryAndWhere :SQLQueryWhere
+public protocol SQLQueryWhere {}
+public struct SQLQueryAndWhere :SQLQueryWhere
 {
     var value :String
 }
-internal struct SQLQueryOrWhere :SQLQueryWhere
+public struct SQLQueryOrWhere :SQLQueryWhere
 {
     var value :String
 }
-internal struct SQLQueryAndWhereOpen :SQLQueryWhere {}
-internal struct SQLQueryAndWhereClose :SQLQueryWhere {}
-internal struct SQLQueryOrWhereOpen :SQLQueryWhere {}
-internal struct SQLQueryOrWhereClose :SQLQueryWhere {}
+public struct SQLQueryAndWhereOpen :SQLQueryWhere {}
+public struct SQLQueryAndWhereClose :SQLQueryWhere {}
+public struct SQLQueryOrWhereOpen :SQLQueryWhere {}
+public struct SQLQueryOrWhereClose :SQLQueryWhere {}
 
-internal extension SQLSelectQueryBuilder
+public extension SQLSelectQueryBuilder
 {
-    static func select(table :String, columns :[String] = []) -> Self
+    public static func select(table :String, columns :[String] = []) -> Self
     {
         return Self(table :table, columns :columns)
     }
 
-    func andWhere<T>(key :String, value :T) -> Self
+    public func andWhere<T>(key :String, value :T) -> Self
     {
         var sql :String = ""
         if value is Int || value is Float || value is Double
@@ -55,7 +55,7 @@ internal extension SQLSelectQueryBuilder
         return self
     }
 
-    func orWhere<T>(key :String, value :T) -> Self
+    public func orWhere<T>(key :String, value :T) -> Self
     {
         var sql :String = ""
         if value is Int || value is Float || value is Double
@@ -72,49 +72,49 @@ internal extension SQLSelectQueryBuilder
         return self
     }
 
-    func andWhereOpen() -> Self
+    public func andWhereOpen() -> Self
     {
         self._where.append(SQLQueryAndWhereOpen())
         return self
     }
 
-    func andWhereClose() -> Self
+    public func andWhereClose() -> Self
     {
         self._where.append(SQLQueryAndWhereClose())
         return self
     }
 
-    func orWhereOpen() -> Self
+    public func orWhereOpen() -> Self
     {
         self._where.append(SQLQueryOrWhereOpen())
         return self
     }
 
-    func orWhereClose() -> Self
+    public func orWhereClose() -> Self
     {
         self._where.append(SQLQueryOrWhereClose())
         return self
     }
 
-    func groupBy(values :[String]) -> Self
+    public func groupBy(values :[String]) -> Self
     {
         self._groupBy = values
         return self
     }
 
-    func offset(offset :Int) -> Self
+    public func offset(offset :Int) -> Self
     {
         self._offset = offset
         return self
     }
 
-    func limit(limit :Int) -> Self
+    public func limit(limit :Int) -> Self
     {
         self._limit = limit
         return self
     }
 
-    func query() -> String
+    public func query() -> String
     {
         let columns :String = 0 == self._columns.count ? "*" : self._columns.joined(separator : ",")
         var sql :String = "SELECT \(columns) FROM \(self._table)"
@@ -166,7 +166,7 @@ internal extension SQLSelectQueryBuilder
 
         return sql
     }
-    func generalEscape(string :String) -> String
+    public func generalEscape(string :String) -> String
     {
         //http://php.net/manual/ja/function.mysql-real-escape-string.php#101248
         let escapes :[String] = ["\\", "\"", "'", "\0", "\n", "\r"]
