@@ -143,15 +143,15 @@ internal extension SQLSelectQueryBuilder
                 didOpen = false
             }
             else if let _ = $0 as? SQLQueryOrWhereOpen
-           {
-               if 0 != whereString.characters.count && false == didOpen { whereString += " OR " }
-               whereString += "("
-               didOpen = true
-           } else if let _ = $0 as? SQLQueryOrWhereClose
-           {
-               whereString += ")"
-               didOpen = false
-           }
+            {
+                if 0 != whereString.characters.count && false == didOpen { whereString += " OR " }
+                whereString += "("
+                didOpen = true
+            } else if let _ = $0 as? SQLQueryOrWhereClose
+            {
+                whereString += ")"
+                didOpen = false
+            }
         }
         if 0 != whereString.characters.count
         {
@@ -172,9 +172,9 @@ internal extension SQLSelectQueryBuilder
         let escapes :[String] = ["\\", "\"", "'", "\0", "\n", "\r"]
         var result :String = string
         escapes.forEach {
-            result = result.stringByReplacingOccurrencesOfString($0, withString:"\\\($0)")
+            result = result.replace(of: $0, with: "\\\($0)")
         }
-        result = result.stringByReplacingOccurrencesOfString("\\x1a", withString: "\\Z")
+        result = result.replace(of: "\\x1a", with: "\\Z")
         return result
     }
 }
